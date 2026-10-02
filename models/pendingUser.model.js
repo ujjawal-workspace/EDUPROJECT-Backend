@@ -23,6 +23,7 @@ const pendingUserSchema = new mongoose.Schema(
             type: String,
             required: true,
             lowercase: true,
+            index: true,
             trim: true,
             unique: true,
         },
@@ -74,9 +75,9 @@ pendingUserSchema.index(
     { expireAfterSeconds: 0 }
 );
 
-pendingUserSchema.index({
-    email: 1,
-});
+// pendingUserSchema.index({
+//     email: 1,
+// });
 
 const PendingUser = mongoose.model(
     "PendingUser",
