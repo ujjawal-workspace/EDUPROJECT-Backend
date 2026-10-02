@@ -18,10 +18,23 @@ const userRoutes = require("./routes/user.routes");
 
 app.set("trust proxy", 1);
 app.use(helmet());
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
-}));
+// app.use(cors({
+//     origin: process.env.CLIENT_URL || "http://localhost:5173",
+//     credentials: true
+// }));
+
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: [
+            "Content-Type",
+            "Authorization",
+            "x-client-type",
+        ],
+    })
+);
 // app.use(mongoSanitize());
 app.use(express.json());
 app.use(compression());
@@ -30,14 +43,14 @@ app.use(sanitizeMiddleware);
 app.use(cookieParser());
 
 
-app.use("/api/v1/auth" , authRoutes);
-app.use("/api/v1/user" , userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
-app.get("/api/" , (req,res) =>{
+app.get("/api/", (req, res) => {
     res.send("hello world");
 })
 
-app.get("/api/health", (req,res)=>{
+app.get("/api/health", (req, res) => {
     return res.status(200).json({
         success: true,
         message: "Server is healthy"
